@@ -17,7 +17,8 @@ public class Application {
 
     static final String topicExchangeName = "spring-boot-exchange";
 
-    static final String queueName = "spring-boot";
+    public static final String queueName = "spring-boot";
+
 
     @Bean
     Queue queue() {
