@@ -7,6 +7,7 @@ import com.rabbitmq.client.MessageProperties;
 
 public class NewTask {
     private static final String TASK_QUEUE_NAME = "task_queue";
+    private static final int TEST_MESSAGE = 4;
 
     public static void main(String[] argv) throws Exception {
         ConnectionFactory factory = new ConnectionFactory();
@@ -18,20 +19,22 @@ public class NewTask {
 
         channel.queueDeclare(TASK_QUEUE_NAME, true, false, false, null); // queueName, durable
 
-        String message = getMessage(argv);
 
-        channel.basicPublish("", TASK_QUEUE_NAME,
-                MessageProperties.PERSISTENT_TEXT_PLAIN,
-                message.getBytes("UTF-8"));
-        System.out.println(" [x] Sent '" + message + "'");
+
+        for(int i =0; i< TEST_MESSAGE; i++) {
+            String message = getMessage(argv, i);
+            channel.basicPublish("", TASK_QUEUE_NAME, MessageProperties.PERSISTENT_TEXT_PLAIN, message.getBytes("UTF-8"));
+            System.out.println(" [x] Sent '" + message + "'" );
+
+        }
 
         channel.close();
         connection.close();
     }
 
-    private static String getMessage(String[] strings) {
+    private static String getMessage(String[] strings, int cnt) {
         if (strings.length < 1)
-            return "Hello World!. This is my style.... hahaha";
+            return "Hello World!. This is my style.... hahaha"+(cnt+1);
         return joinStrings(strings, " ");
     }
 
